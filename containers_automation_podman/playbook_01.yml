@@ -1,0 +1,22 @@
+---
+- name: Play to deploy httpd on container
+  hosts: localhost
+  gather_facts: false
+  connection: podman 
+
+  tasks:
+    - name: Task to pull image
+      containers.podman.podman_image:
+        name: httpd
+        pull: true
+        tag: latest
+    - name: Task to run container
+      containers.podman.podman_container:
+        name: webserver
+        image: httpd
+        state: started
+        detach: true
+        expose:
+          - '80'
+        ports:
+          - 8080:80       
